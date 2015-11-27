@@ -11,7 +11,6 @@
                    if(angular.isUndefined(cat[nowcat])){
                        cat[nowcat] = true;
                        catlist.push(nowcat);
-                       console.log(cat);
                    }
                });
                return catlist;
