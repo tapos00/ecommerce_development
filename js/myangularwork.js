@@ -29,11 +29,28 @@
             // route for the contact page
             .when('/contact', {
                 templateUrl: 'partial/contact.html'
-               // controller: 'contactController'
+                // controller: 'contactController'
             })
             .otherwise({
                 redirectTo: '/home'
             });
+    });
+    app.filter('uniqueCategory',function(){
+       return function(allproduct) {
+           if(angular.isArray(allproduct)){
+               var cat = {};
+               var catlist  = [];
+               angular.forEach(allproduct, function(aproduct) {
+                   var nowcat = aproduct.category;
+                   if(angular.isUndefined(cat[nowcat])){
+                       cat[nowcat] = true;
+                       catlist.push(nowcat);
+                   }
+               });
+               return catlist;
+           }
+           return allproduct;
+       }
     });
 
     app.filter('uniqueCategory', function () {
