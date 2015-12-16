@@ -31,26 +31,30 @@
                 templateUrl: 'partial/contact.html'
                 // controller: 'contactController'
             })
+            .when('/product/:productId', {
+                templateUrl: 'partial/single.html',
+                controller: 'ProductDetailCtrl'
+            })
             .otherwise({
                 redirectTo: '/home'
             });
     });
-    app.filter('uniqueCategory',function(){
-       return function(allproduct) {
-           if(angular.isArray(allproduct)){
-               var cat = {};
-               var catlist  = [];
-               angular.forEach(allproduct, function(aproduct) {
-                   var nowcat = aproduct.category;
-                   if(angular.isUndefined(cat[nowcat])){
-                       cat[nowcat] = true;
-                       catlist.push(nowcat);
-                   }
-               });
-               return catlist;
-           }
-           return allproduct;
-       }
+    app.filter('uniqueCategory', function () {
+        return function (allproduct) {
+            if (angular.isArray(allproduct)) {
+                var cat = {};
+                var catlist = [];
+                angular.forEach(allproduct, function (aproduct) {
+                    var nowcat = aproduct.Categories;
+                    if (angular.isUndefined(cat[nowcat])) {
+                        cat[nowcat] = true;
+                        catlist.push(nowcat);
+                    }
+                });
+                return catlist;
+            }
+            return allproduct;
+        }
     });
 
     app.filter('uniqueCategory', function () {
@@ -59,7 +63,7 @@
                 var cat = {};
                 var catlist = [];
                 angular.forEach(allproduct, function (aproduct) {
-                    var nowcat = aproduct.category;
+                    var nowcat = aproduct.Categories;
                     if (angular.isUndefined(cat[nowcat])) {
                         cat[nowcat] = true;
                         catlist.push(nowcat);
@@ -72,10 +76,10 @@
         }
     });
 
-    app.controller("myCtrl", ['$scope', '$http','$location', function ($scope, $http,$location) {
+    app.controller("myCtrl", ['$scope', '$http', '$location', function ($scope, $http, $location) {
         $scope.productList = [];
         $scope.selectpro = null;
-        $http.get('/productlist.json').then(function (response) {
+        $http.get('/productlist_latest.json').then(function (response) {
             $scope.productList = response.data;
         }, function () {
 
@@ -84,7 +88,7 @@
             $scope.selectpro = aCategory;
         };
         $scope.clicktoselect = function (aproduct) {
-            return $scope.selectpro == null || $scope.selectpro == aproduct.category;
+            return $scope.selectpro == null || $scope.selectpro == aproduct.Categories;
         };
         $scope.selectactive = function (category) {
             return category == $scope.selectpro ? "active1" : null;
@@ -94,4 +98,19 @@
             return active;
         };
     }]);
+    app.controller('ProductDetailCtrl', ['$scope', '$routeParams',
+        function($scope, $routeParams) {
+            $scope.productId = $routeParams.productId;
+            $scope.selectedProduct = {};
+            angular.forEach($scope.productList, function(aproduct) {
+                if(aproduct.ID == $scope.productId){
+                    $scope.selectedProduct = aproduct;
+                }
+            });
+            $scope.seletedimage = null;
+            $scope.getImageZoom = function(image){
+                $scope.seletedimage = image;
+            }
+
+        }]);
 })();
