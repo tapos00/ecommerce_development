@@ -90,7 +90,7 @@
                             <li><a href="#/account"><i class="fa fa-user"></i> Account</a></li>
                             <li><a href="#/wish"><i class="fa fa-star"></i> Wishlist</a></li>
                             <li><a ng-class="{ active: isActive('/checkout') }" href="#/checkout"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-                            <li><a ng-class="{ active: isActive('/cart') }" href="#/cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+                            <li><a ng-class="{ active: isActive('/cart') }" href="#/cart"><i class="fa fa-shopping-cart"></i><cart-summary></cart-summary></a></li>
                             <li><a ng-class="{ active: isActive('/login') }" href="#/login"><i class="fa fa-lock"></i> Login</a></li>
                         </ul>
                     </div>
@@ -311,6 +311,8 @@
 <script src="js/main.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-route/angular-route.min.js"></script>
+<script src="js/cart.js"></script>
 <script src="js/myangularwork.js"></script>
+
 </body>
 </html>

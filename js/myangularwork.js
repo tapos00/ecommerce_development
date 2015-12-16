@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("myApp", ['ngRoute']);
+    var app = angular.module("myApp", ['ngRoute','cart']);
 
     app.config(function ($routeProvider) {
         $routeProvider
@@ -14,7 +14,9 @@
                 templateUrl: 'partial/blog.html'
             })
             .when('/cart', {
-                templateUrl: 'partial/cart.html'
+                templateUrl: 'partial/cart.html',
+                controller: 'CartCtrl'
+
             })
             .when('/checkout', {
                 templateUrl: 'partial/checkout.html'
@@ -75,10 +77,20 @@
             return allproduct;
         }
     });
+    app.directive('myLeft', function() {
+          return {
+            restrict: 'E',
+            templateUrl: 'partial/left_side.html'
+          };
+    });
 
-    app.controller("myCtrl", ['$scope', '$http', '$location', function ($scope, $http, $location) {
+
+
+
+    app.controller("myCtrl", ['$scope', '$http', '$location','cart', function ($scope, $http, $location,cart) {
         $scope.productList = [];
         $scope.selectpro = null;
+
         $http.get('/productlist_latest.json').then(function (response) {
             $scope.productList = response.data;
         }, function () {
@@ -97,14 +109,17 @@
             var active = (viewLocation === $location.path());
             return active;
         };
+        $scope.addProduct = function(aproduct){
+            cart.addProduct(aproduct);
+        };
     }]);
-    app.controller('ProductDetailCtrl', ['$scope', '$routeParams',
-        function($scope, $routeParams) {
+    app.controller('ProductDetailCtrl', ['$scope', '$routeParams',function($scope, $routeParams) {
             $scope.productId = $routeParams.productId;
             $scope.selectedProduct = {};
             angular.forEach($scope.productList, function(aproduct) {
                 if(aproduct.ID == $scope.productId){
                     $scope.selectedProduct = aproduct;
+
                 }
             });
             $scope.seletedimage = null;
@@ -113,4 +128,9 @@
             }
 
         }]);
+
+    app.controller("CartCtrl", ['$scope', '$http', '$location','cart', function ($scope, $http, $location,cart) {
+        $scope.allCartProduct = cart.getProducts();
+    }]);
+    
 })();
